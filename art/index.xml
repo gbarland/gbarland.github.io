@@ -12,14 +12,21 @@
     
     
     <item>
-      <title></title>
+      <title>cube</title>
+      <link>https://gbarland.github.io/art/2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gbarland.github.io/art/2/</guid>
+      <description>Code</description>
+    </item>
+    
+    <item>
+      <title>geodes</title>
       <link>https://gbarland.github.io/art/1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://gbarland.github.io/art/1/</guid>
-      <description>Geodes
- Meditations on Moloch
- </description>
+      <description>-Code</description>
     </item>
     
   </channel>
