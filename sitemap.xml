@@ -4,21 +4,26 @@
   
   <url>
     <loc>https://gbarland.github.io/</loc>
-    <lastmod>2020-02-09T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://gbarland.github.io/projects/</loc>
+    <lastmod>2020-04-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gbarland.github.io/projects/other/vbss/</loc>
+    <lastmod>2020-04-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://gbarland.github.io/projects/code/titanic/</loc>
     <lastmod>2020-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://gbarland.github.io/projects/titanic/</loc>
-    <lastmod>2020-02-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://gbarland.github.io/projects/qrcrypt/</loc>
+    <loc>https://gbarland.github.io/projects/code/qrcrypt/</loc>
     <lastmod>2018-09-17T00:00:00+00:00</lastmod>
   </url>
   
