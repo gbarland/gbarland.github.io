@@ -7,36 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright> </copyright>
-    <lastBuildDate>Mon, 06 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 17 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://gbarland.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Subwoofer Build</title>
-      <link>https://gbarland.github.io/projects/other/vbss/</link>
-      <pubDate>Mon, 06 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://gbarland.github.io/projects/other/vbss/</guid>
-      <description>WinISD modeling
- results:</description>
-    </item>
-    
-    <item>
-      <title>Titanic</title>
-      <link>https://gbarland.github.io/projects/code/titanic/</link>
-      <pubDate>Sun, 09 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://gbarland.github.io/projects/code/titanic/</guid>
-      <description>Header 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec interdum metus. Aenean rutrum ligula sodales ex auctor, sed tempus dui mollis. Curabitur ipsum dui, aliquet nec commodo at, tristique eget ante. Donec quis dolor nec nunc mollis interdum vel in purus. Sed vitae leo scelerisque, sollicitudin elit sed, congue ante. In augue nisl, vestibulum commodo est a, tristique porttitor est. Proin laoreet iaculis ornare. Nullam ut neque quam.</description>
-    </item>
-    
-    <item>
       <title>QRcrypt</title>
-      <link>https://gbarland.github.io/projects/code/qrcrypt/</link>
+      <link>https://gbarland.github.io/projects/qrcrypt/</link>
       <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://gbarland.github.io/projects/code/qrcrypt/</guid>
+      <guid>https://gbarland.github.io/projects/qrcrypt/</guid>
       <description>St. Thomas Mathematics Research project
  Won the center for applied mathematics research award</description>
     </item>
