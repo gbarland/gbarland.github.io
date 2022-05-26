@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright> </copyright>
-    <lastBuildDate>Mon, 17 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 May 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://gbarland.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AWS Fraud Detection</title>
+      <link>https://gbarland.github.io/projects/awsfraudproject/</link>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://gbarland.github.io/projects/awsfraudproject/</guid>
+      <description>Trends Marketplace 2022 MSBA-6330 Group 7: Grant Barland, Huiyan Xiong, Jacob Braun, Jiayi Wang, Ravi Hasyagar, Shuyun Liu
+Fraud Detection Model and Visualization using AWS SageMaker, AWS QuickSight, and AWS S3
+Project Background This project describes how Amazon S3, Amazon SageMaker and Amazon QuickSight can be utilized for Fraud Detection.
+Why Fraud? Dataset https://www.kaggle.com/datasets/kartik2112/fraud-detection
+This is a simulated credit card transaction dataset containing legitimate and fraud transactions from the duration 1st Jan 2019 - 31st Dec 2020.</description>
+    </item>
     
     <item>
       <title>QRcrypt</title>
