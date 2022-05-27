@@ -26,6 +26,15 @@ This is a simulated credit card transaction dataset containing legitimate and fr
     </item>
     
     <item>
+      <title>Cats vs. Dogs Image Classifier</title>
+      <link>https://gbarland.github.io/projects/catsvsdogs/</link>
+      <pubDate>Wed, 06 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://gbarland.github.io/projects/catsvsdogs/</guid>
+      <description># Tools import pandas as pd from sklearn.model_selection import train_test_split import matplotlib.pyplot as plt import numpy as np import math import os # ML import tensorflow as tf from keras.models import Sequential from keras.layers import Dense from keras import losses from keras.callbacks import EarlyStopping from keras.layers import BatchNormalization import random import cv2 from tensorflow import keras from keras.models import Sequential from keras.layers import Input, Dropout, Flatten, Conv2D, MaxPool2D, Dense, Activation from keras.</description>
+    </item>
+    
+    <item>
       <title>QRcrypt</title>
       <link>https://gbarland.github.io/projects/qrcrypt/</link>
       <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
