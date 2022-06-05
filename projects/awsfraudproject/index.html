@@ -6,10 +6,9 @@
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="description" content="Trends Marketplace 2022 MSBA-6330 Group 7: Grant Barland, Huiyan Xiong, Jacob Braun, Jiayi Wang, Ravi Hasyagar, Shuyun Liu
-Fraud Detection Model and Visualization using AWS SageMaker, AWS QuickSight, and AWS S3
-Project Background This project describes how Amazon S3, Amazon SageMaker and Amazon QuickSight can be utilized for Fraud Detection.
-Why Fraud? Dataset https://www.kaggle.com/datasets/kartik2112/fraud-detection
+<meta name="description" content="Background This project describes how Amazon S3, Amazon SageMaker and Amazon QuickSight can be utilized for Fraud Detection.
+Why Fraud? In 2021, credit card fraud grew to the largest ever, with 393,207 reports of credit card fraud filed. This poses a major risk for lenders and borrowers alike, and cloud based analytics are a great solution to uncover this problem.
+Dataset https://www.kaggle.com/datasets/kartik2112/fraud-detection
 This is a simulated credit card transaction dataset containing legitimate and fraud transactions from the duration 1st Jan 2019 - 31st Dec 2020."/>
 <meta name="keywords" content="hmm"/>
 <meta name="robots" content="noodp"/>
@@ -38,9 +37,10 @@ This is a simulated credit card transaction dataset containing legitimate and fr
 <meta property="og:title" content="AWS Fraud Detection" />
 <meta property="og:description" content="Fraud Detection Model and Visualization using AWS SageMaker, AWS QuickSight, and AWS S3" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://gbarland.github.io/projects/awsfraudproject/" />
+<meta property="og:url" content="https://gbarland.github.io/projects/awsfraudproject/" /><meta property="article:section" content="Projects" />
 <meta property="article:published_time" content="2022-05-06T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-05-06T00:00:00+00:00" /><meta property="og:site_name" content="barland.net" />
+
 
 
 
@@ -148,113 +148,92 @@ This is a simulated credit card transaction dataset containing legitimate and fr
 
     
       
-        <img src="https://gbarland.github.io/img/projects/data_pipeline.png" class="post-cover" />
+        <img src="https://gbarland.github.io/img/projects/AWSFraud/data_pipeline.png" class="post-cover" />
       
     
 
     <div class="post-content">
-      <h1 id="trends-marketplace-2022">Trends Marketplace 2022</h1>
-<p><strong>MSBA-6330 Group 7:</strong>
-<!-- raw HTML omitted -->
-Grant Barland, Huiyan Xiong, Jacob Braun, Jiayi Wang, Ravi Hasyagar, Shuyun Liu</p>
-<p>Fraud Detection Model and Visualization using AWS SageMaker, AWS QuickSight, and AWS S3</p>
-<!-- raw HTML omitted -->
-<h2 id="project-background">Project Background</h2>
+      <h1 id="background">Background</h1>
 <p>This project describes how Amazon S3, Amazon SageMaker and Amazon QuickSight can be utilized for <strong>Fraud Detection</strong>.</p>
-<h4 id="why-fraud">Why Fraud?</h4>
-<!-- raw HTML omitted -->
-<h2 id="dataset">Dataset</h2>
+<h2 id="why-fraud">Why Fraud?</h2>
+
+  <img src="/img/projects/AWSFraud/fraud_info.png"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<p>In 2021, credit card fraud grew to the largest ever, with 393,207 reports of credit card fraud filed. This poses a major risk for lenders and borrowers alike, and cloud based analytics are a great solution to uncover this problem.</p>
+<h1 id="dataset">Dataset</h1>
 <p><a href="https://www.kaggle.com/datasets/kartik2112/fraud-detection">https://www.kaggle.com/datasets/kartik2112/fraud-detection</a></p>
 <p>This is a simulated credit card transaction dataset containing legitimate and fraud transactions from the duration 1st Jan 2019 - 31st Dec 2020. It covers credit cards of 1000 customers doing transactions with a pool of 800 merchants.</p>
-<h2 id="tools-and-pipeline">Tools and Pipeline</h2>
+<h1 id="tools-and-pipeline">Tools and Pipeline</h1>
 <p>In order to run the full gamut of data storage, data processing, and data visualization we needed to leverage three tools from the AWS ecosystem:</p>
-<h4 id="built-with">Built With</h4>
+<h2 id="built-with">Built With</h2>
 <ul>
 <li><a href="https://aws.amazon.com/sagemaker/">AWS SageMaker</a></li>
 <li><a href="https://aws.amazon.com/quicksight/">AWS QuickSight</a></li>
 <li><a href="https://aws.amazon.com/s3/">AWS S3</a></li>
 </ul>
-<h4 id="pipeline">Pipeline</h4>
-<!-- raw HTML omitted -->
-<h4 id="amazon-s3">Amazon S3</h4>
+<h2 id="pipeline">Pipeline</h2>
+
+  <img src="/img/projects/AWSFraud/data_pipeline.png"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<h3 id="amazon-s3">Amazon S3</h3>
 <p>S3 is used in our pipeline as the data and model result storage solution that allows our sagemaker and quicksight tools to integrate with one another.
-Folder structures can be created and files stored can be accessed by any AWS Ecosystem.
-<!-- raw HTML omitted -->
-S3-Bucket Definition
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<h4 id="amazon-sagemaker">Amazon Sagemaker</h4>
-<p>SageMaker is used as a Machine Learning tool using AWS cloud compute to build and run a fraud detection algorithm, using XGBoost, to help predict future fraud.
-<!-- raw HTML omitted -->
-Sagemakers provides jupyter lab to build models and explore data using python and R. It provides sophisticated environments with packages from PyTorch to Tensorflow. It can also build automated models using XGB and provide end to end description of the data.
-Check out: &lsquo;sagemaker/Exploratory Data Analytics.ipynb&rsquo; and &lsquo;sagemaker/Model Training and Deployment.ipynb&rsquo;</p>
-<p>Once model is built, it can be deployed to create an endpoint, this endpoint can be used to access the model and get predictions.
-<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h4 id="amazon-quicksight">Amazon QuickSight</h4>
+Folder structures can be created and files stored can be accessed by any AWS Ecosystem.</p>
+<p>S3-Bucket Definition</p>
+
+  <img src="/img/projects/AWSFraud/S3-Buckets.jpg"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<p>S3 Folder Structure</p>
+
+  <img src="/img/projects/AWSFraud/S3-Data.jpg"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<h3 id="amazon-sagemaker">Amazon Sagemaker</h3>
+<p>SageMaker is used as a Machine Learning tool using AWS cloud compute to build and run a fraud detection algorithm, using XGBoost, to help predict future fraud.</p>
+<p>Sagemakers provides jupyter lab to build models and explore data using python and R. It provides sophisticated environments with packages from PyTorch to Tensorflow. It can also build automated models using XGB and provide end to end description of the data.
+Check out:</p>
+<ul>
+<li><a href="https://github.com/gbarland/AWS-Fraud-Project/blob/main/sagemaker/Exploratory%20Data%20Analytics.ipynb">sagemaker/Exploratory Data Analytics.ipynb</a></li>
+<li><a href="https://github.com/gbarland/AWS-Fraud-Project/blob/main/sagemaker/Model%20Training%20and%20Deployment.ipynb">sagemaker/Model Training and Deployment.ipynb</a></li>
+</ul>
+<p>Once the model is built, it can be deployed to create an endpoint, this endpoint can be used to access the model and get predictions.</p>
+
+  <img src="/img/projects/AWSFraud/EndpointLocation.png"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<p>Endpoint hosted</p>
+
+  <img src="/img/projects/AWSFraud/Postman-Authorization.jpg"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<p>Endpoint Output from sample data pushed to the model</p>
+
+  <img src="/img/projects/AWSFraud/Postman-Body.jpg"  alt="Fraud"  class="left"  style="border-radius: 8px;"  />
+
+
+<h3 id="amazon-quicksight">Amazon QuickSight</h3>
 <p>Quicksight is the final stage of visualization and allows us to build a dashboard that interactively displays information about our dataset, and the fraud results from our model.</p>
-<!-- raw HTML omitted -->
-<h4 id="conclusion">Conclusion</h4>
+
+  <img src="/img/projects/AWSFraud/Dashboard-Example1.png"  alt="Fraud"  class="left"  />
+
+
+
+  <img src="/img/projects/AWSFraud/Dashboard-Example2.png"  alt="Fraud"  class="left"  />
+
+
+
+  <img src="/img/projects/AWSFraud/Dashboard-Example3.png"  alt="Fraud"  class="left"  />
+
+
+
+  <img src="/img/projects/AWSFraud/Dashboard-Example4.png"  alt="Fraud"  class="left"  />
+
+
+<h1 id="conclusion">Conclusion</h1>
 <p>S3 provides stable data storage. Sagemaker can be used to create and deploy models very easily. Quicksight can be leveraged to generate dashboards and reports. All the 3 tools are easy to use and access.</p>
-<h4 id="contact-us">Contact Us</h4>
-<p>**Email Ids:**<!-- raw HTML omitted -->
-<a href="mailto:barla049@umn.edu">barla049@umn.edu</a><!-- raw HTML omitted -->
-<a href="mailto:xion2190@umn.edu">xion2190@umn.edu</a><!-- raw HTML omitted -->
-<a href="mailto:braun523@umn.edu">braun523@umn.edu</a><!-- raw HTML omitted -->
-<a href="mailto:wan00324@umn.edu">wan00324@umn.edu</a><!-- raw HTML omitted -->
-<a href="mailto:liu01727@umn.edu">liu01727@umn.edu</a><!-- raw HTML omitted -->
-<a href="mailto:hasya002@umn.edu">hasya002@umn.edu</a><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#75715e">/* PostCSS code */</span>
 
-<span style="color:#f92672">pre</span> {
-  <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#1a1a1d</span>;
-  <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">20</span><span style="color:#66d9ef">px</span>;
-  <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">8</span><span style="color:#66d9ef">px</span>;
-  <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
-  <span style="color:#66d9ef">overflow</span>: <span style="color:#66d9ef">auto</span>;
-
-  <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#960050;background-color:#1e0010">m</span><span style="color:#960050;background-color:#1e0010">e</span><span style="color:#960050;background-color:#1e0010">d</span><span style="color:#960050;background-color:#1e0010">i</span><span style="color:#960050;background-color:#1e0010">a</span> <span style="color:#960050;background-color:#1e0010">(</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#960050;background-color:#1e0010">p</span><span style="color:#960050;background-color:#1e0010">h</span><span style="color:#960050;background-color:#1e0010">o</span><span style="color:#960050;background-color:#1e0010">n</span><span style="color:#960050;background-color:#1e0010">e</span><span style="color:#960050;background-color:#1e0010">)</span> <span style="color:#960050;background-color:#1e0010">{</span>
-    <span style="color:#66d9ef">white-space</span>: <span style="color:#66d9ef">pre</span><span style="color:#f92672">-</span><span style="color:#66d9ef">wrap</span>;
-    <span style="color:#66d9ef">word-wrap</span>: <span style="color:#66d9ef">break-word</span>;
-  }
-
-  <span style="color:#f92672">code</span> {
-    <span style="color:#66d9ef">background</span>: <span style="color:#66d9ef">none</span> <span style="color:#75715e">!important</span>;
-    <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#ccc</span>;
-    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span>;
-    <span style="color:#66d9ef">font-size</span>: <span style="color:#66d9ef">inherit</span>;
-  }
-<span style="color:#960050;background-color:#1e0010">}</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// JS code
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">menuTrigger</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.menu-trigger&#39;</span>)
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">menu</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.menu&#39;</span>)
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">mobileQuery</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getComputedStyle</span>(document.<span style="color:#a6e22e">body</span>).<span style="color:#a6e22e">getPropertyValue</span>(<span style="color:#e6db74">&#39;--phoneWidth&#39;</span>)
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">isMobile</span> <span style="color:#f92672">=</span> () =&gt; window.<span style="color:#a6e22e">matchMedia</span>(<span style="color:#a6e22e">mobileQuery</span>).<span style="color:#a6e22e">matches</span>
-<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">isMobileMenu</span> <span style="color:#f92672">=</span> () =&gt; {
-  <span style="color:#a6e22e">menuTrigger</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">toggle</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>, <span style="color:#f92672">!</span><span style="color:#a6e22e">isMobile</span>())
-  <span style="color:#a6e22e">menu</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">toggle</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>, <span style="color:#a6e22e">isMobile</span>())
-}
-
-<span style="color:#a6e22e">isMobileMenu</span>()
-
-<span style="color:#a6e22e">menuTrigger</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;click&#39;</span>, () =&gt; <span style="color:#a6e22e">menu</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">toggle</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>))
-
-window.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;resize&#39;</span>, <span style="color:#a6e22e">isMobileMenu</span>)
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!--</span><span style="color:#75715e"> HTML code </span><span style="color:#75715e">--&gt;</span>
-
-&lt;<span style="color:#f92672">section</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>&gt;
-  &lt;<span style="color:#f92672">div</span>&gt;
-   &lt;<span style="color:#f92672">h1</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;title&#34;</span>&gt;{{ .Title }}&lt;/<span style="color:#f92672">h1</span>&gt;
-    {{ range .Pages }}
-      {{ .Render &#34;summary&#34;}}
-    {{ end }}
-  &lt;/<span style="color:#f92672">div</span>&gt;
-&lt;/<span style="color:#f92672">section</span>&gt;
-</code></pre></div>
     </div>
     
       

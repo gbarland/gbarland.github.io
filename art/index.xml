@@ -6,11 +6,7 @@
     <description>Recent content in Arts on barland.net</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright> </copyright>
-    
-	<atom:link href="https://gbarland.github.io/art/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <copyright> </copyright><atom:link href="https://gbarland.github.io/art/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>geodes</title>
       <link>https://gbarland.github.io/art/1/</link>

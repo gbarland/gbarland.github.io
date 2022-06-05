@@ -6,7 +6,10 @@
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="description" content="# Tools import pandas as pd from sklearn.model_selection import train_test_split import matplotlib.pyplot as plt import numpy as np import math import os # ML import tensorflow as tf from keras.models import Sequential from keras.layers import Dense from keras import losses from keras.callbacks import EarlyStopping from keras.layers import BatchNormalization import random import cv2 from tensorflow import keras from keras.models import Sequential from keras.layers import Input, Dropout, Flatten, Conv2D, MaxPool2D, Dense, Activation from keras."/>
+<meta name="description" content="Introduction In this project, I will be answering the most pressing question of our generation: How do we distinguish between images of cats and dogs?
+In all seriousness, this is a great problem to explore the potential of deep learning and specifically, transfer learning on a simple task of classifying between images of cats and dogs.
+The tools I will be using in this project are:
+ Python  Typical Data Science tools such as Pandas, Numpy, and Matplotlib   Keras  High level library built on top of Tensorflow for creating neural networks   TensorFlow  The underlying library for Keras used for deep learning computation   Kaggle  The competition site for this project."/>
 <meta name="keywords" content="hmm"/>
 <meta name="robots" content="noodp"/>
 <link rel="canonical" href="https://gbarland.github.io/projects/catsvsdogs/" />
@@ -34,9 +37,10 @@
 <meta property="og:title" content="Cats vs. Dogs Image Classifier" />
 <meta property="og:description" content="Image Classification transfer learning problem using Keras and Resnet" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://gbarland.github.io/projects/catsvsdogs/" />
+<meta property="og:url" content="https://gbarland.github.io/projects/catsvsdogs/" /><meta property="article:section" content="Projects" />
 <meta property="article:published_time" content="2022-04-06T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-04-06T00:00:00+00:00" /><meta property="og:site_name" content="barland.net" />
+
 
 
 
@@ -149,39 +153,297 @@
     
 
     <div class="post-content">
-      <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Tools</span>
-<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
-<span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
-<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
-<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
-<span style="color:#f92672">import</span> math
-<span style="color:#f92672">import</span> os
-
-<span style="color:#75715e"># ML</span>
-<span style="color:#f92672">import</span> tensorflow <span style="color:#f92672">as</span> tf
-<span style="color:#f92672">from</span> keras.models <span style="color:#f92672">import</span> Sequential
-<span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Dense
-<span style="color:#f92672">from</span> keras <span style="color:#f92672">import</span> losses
-<span style="color:#f92672">from</span> keras.callbacks <span style="color:#f92672">import</span> EarlyStopping
-<span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> BatchNormalization
-
-<span style="color:#f92672">import</span> random
-<span style="color:#f92672">import</span> cv2
-<span style="color:#f92672">from</span> tensorflow <span style="color:#f92672">import</span> keras
-
-<span style="color:#f92672">from</span> keras.models <span style="color:#f92672">import</span> Sequential
-<span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Input, Dropout, Flatten, Conv2D, MaxPool2D, Dense, Activation
-<span style="color:#f92672">from</span> keras.callbacks <span style="color:#f92672">import</span> ModelCheckpoint, Callback, EarlyStopping
-<span style="color:#f92672">from</span> keras.utils <span style="color:#f92672">import</span> np_utils
-<span style="color:#f92672">from</span> keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
-<span style="color:#f92672">from</span> keras <span style="color:#f92672">import</span> layers
-<span style="color:#f92672">from</span> tensorflow.keras.applications.resnet_v2 <span style="color:#f92672">import</span> preprocess_input
-<span style="color:#f92672">from</span> tensorflow.keras.applications <span style="color:#f92672">import</span> ResNet152V2
-
-np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
-tf<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>set_seed(<span style="color:#ae81ff">42</span>)
-</code></pre></div><h3 id="import-kaggle-data">Import Kaggle Data</h3>
-
+      <h1 id="introduction">Introduction</h1>
+<p>In this project, I will be answering the most pressing question of our generation: <em>How do we distinguish between images of cats and dogs?</em></p>
+<p>In all seriousness, this is a great problem to explore the potential of deep learning and specifically, transfer learning on a simple task of classifying between images of cats and dogs.</p>
+<p>The tools I will be using in this project are:</p>
+<ul>
+<li><a href="https://www.python.org/">Python</a>
+<ul>
+<li>Typical Data Science tools such as <a href="https://pandas.pydata.org/">Pandas</a>, <a href="https://www.numpy.org/">Numpy</a>, and <a href="https://matplotlib.org/">Matplotlib</a></li>
+</ul>
+</li>
+<li><a href="https://keras.io/">Keras</a>
+<ul>
+<li>High level library built on top of Tensorflow for creating neural networks</li>
+</ul>
+</li>
+<li><a href="https://www.tensorflow.org/">TensorFlow</a>
+<ul>
+<li>The underlying library for Keras used for deep learning computation</li>
+</ul>
+</li>
+<li><a href="https://www.kaggle.com/competitions/dogs-vs-cats-redux-kernels-edition">Kaggle</a>
+<ul>
+<li>The competition site for this project. Create a Classifier model with the lowest prediction error possible</li>
+</ul>
+</li>
+<li><a href="https://colab.research.google.com/">Google Colab</a>
+<ul>
+<li>A Google-hosted cloud platform for running Jupyter notebooks. Useful when coding away from home, or in need of a high end GPU for deep learning</li>
+</ul>
+</li>
+</ul>
+<p>The steps I will be taking in this project are:</p>
+<ol>
+<li>Import the data from Kaggle into Google Colab Environment</li>
+<li>Preprocess the data for Keras</li>
+<li>Setup and Train the Keras ResNet152V2 model</li>
+<li>Evaluate the model on the test set</li>
+<li>Create a submission file for the Kaggle competition</li>
+</ol>
+<h1 id="data-preparation">Data Preparation</h1>
+<p>Here is an overview of the libraries needed for the project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Tools</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> math
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ML</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.models <span style="color:#f92672">import</span> Sequential
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Dense
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras <span style="color:#f92672">import</span> losses
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.callbacks <span style="color:#f92672">import</span> EarlyStopping
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> BatchNormalization
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow <span style="color:#f92672">import</span> keras
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.models <span style="color:#f92672">import</span> Sequential
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Input, Dropout, Flatten, Conv2D, MaxPool2D, Dense, Activation
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.callbacks <span style="color:#f92672">import</span> ModelCheckpoint, Callback, EarlyStopping
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.utils <span style="color:#f92672">import</span> np_utils
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> keras <span style="color:#f92672">import</span> layers
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.applications.resnet_v2 <span style="color:#f92672">import</span> preprocess_input
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.applications <span style="color:#f92672">import</span> ResNet152V2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>set_seed(<span style="color:#ae81ff">42</span>)
+</span></span></code></pre></div><p>Before we can begin, we will need to create a repeatable workflow for importing the data from Kaggle into our Colab environment.</p>
+<p><a href="https://www.analyticsvidhya.com/blog/2021/06/how-to-load-kaggle-datasets-directly-into-google-colab/">This Article</a> gives a good explanation on how to set up a download directly from the Kaggle competition we are interested in.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># upload kaggle.json to Colab base directory</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> mkdir <span style="color:#f92672">~/.</span>kaggle
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> cp kaggle<span style="color:#f92672">.</span>json <span style="color:#f92672">~/.</span>kaggle<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> chmod <span style="color:#ae81ff">600</span> <span style="color:#f92672">~/.</span>kaggle<span style="color:#f92672">/</span>kaggle<span style="color:#f92672">.</span>json
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Download and unzip the data</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> kaggle competitions download dogs<span style="color:#f92672">-</span>vs<span style="color:#f92672">-</span>cats<span style="color:#f92672">-</span>redux<span style="color:#f92672">-</span>kernels<span style="color:#f92672">-</span>edition
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> unzip dogs<span style="color:#f92672">-</span>vs<span style="color:#f92672">-</span>cats<span style="color:#f92672">-</span>redux<span style="color:#f92672">-</span>kernels<span style="color:#f92672">-</span>edition<span style="color:#f92672">.</span>zip
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Unzip the internal test and train data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">%%</span>capture
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> unzip test<span style="color:#f92672">.</span>zip
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span> unzip train<span style="color:#f92672">.</span>zip
+</span></span></code></pre></div><h2 id="folder-setup">Folder Setup</h2>
+<p>Keras <a href="https://keras.io/preprocessing/image/">image data generator</a> is the tool we will use for reading the training and testing data. It requires that the images are stored within a labelled folder structure so we will move the images to new directories.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Create labelled directories</span>
+</span></span><span style="display:flex;"><span>train_folder <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;train/&#39;</span>
+</span></span><span style="display:flex;"><span>train_images <span style="color:#f92672">=</span> [i <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>listdir(train_folder)]
+</span></span><span style="display:flex;"><span>dog <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;train/dog&#39;</span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;train/cat&#39;</span>
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>mkdir(dog)
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>mkdir(cat)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Move train images to labelled folders</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> image <span style="color:#f92672">in</span> train_images:
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;dog&#39;</span> <span style="color:#f92672">in</span> image:
+</span></span><span style="display:flex;"><span>    os<span style="color:#f92672">.</span>replace(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(train_folder, image), os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(dog, image))
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">elif</span> <span style="color:#e6db74">&#39;cat&#39;</span> <span style="color:#f92672">in</span> image:
+</span></span><span style="display:flex;"><span>    os<span style="color:#f92672">.</span>replace(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(train_folder, image), os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(cat, image))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Move test images to test folder</span>
+</span></span><span style="display:flex;"><span>test_images <span style="color:#f92672">=</span> [i <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>listdir(<span style="color:#e6db74">&#39;test/&#39;</span>)]
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>mkdir(<span style="color:#e6db74">&#39;test/test_images&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> image <span style="color:#f92672">in</span> test_images:
+</span></span><span style="display:flex;"><span>  os<span style="color:#f92672">.</span>replace(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#39;test/&#39;</span>, image), os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#39;test/test_images&#39;</span>, image))
+</span></span></code></pre></div><h2 id="pipeline-setup">Pipeline setup</h2>
+<p>With the directories setup, we can now setup the data pipeline for Keras using <code>ImageDataGenerator</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>train_image_gen <span style="color:#f92672">=</span> ImageDataGenerator(rescale<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">255</span>, horizontal_flip<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, validation_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)
+</span></span><span style="display:flex;"><span>test_image_gen <span style="color:#f92672">=</span> ImageDataGenerator(rescale<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">255</span>)
+</span></span></code></pre></div><p>We will use the <code>validation_split</code> parameter to split the training data into a training set and validation set. 20% of the training data will be used for validation. The remaining test data will be used for validation after we have finalized our model hyperparameters.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>image_size <span style="color:#f92672">=</span> (<span style="color:#ae81ff">224</span>, <span style="color:#ae81ff">224</span>)
+</span></span><span style="display:flex;"><span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>train_generator <span style="color:#f92672">=</span> train_image_gen<span style="color:#f92672">.</span>flow_from_directory(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;train&#39;</span>,
+</span></span><span style="display:flex;"><span>    target_size<span style="color:#f92672">=</span>image_size,
+</span></span><span style="display:flex;"><span>    batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>    seed<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>,
+</span></span><span style="display:flex;"><span>    subset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;training&#39;</span>,
+</span></span><span style="display:flex;"><span>    shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    class_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>val_generator <span style="color:#f92672">=</span> train_image_gen<span style="color:#f92672">.</span>flow_from_directory(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;train&#39;</span>,
+</span></span><span style="display:flex;"><span>    target_size<span style="color:#f92672">=</span>image_size,
+</span></span><span style="display:flex;"><span>    batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>    seed<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>,
+</span></span><span style="display:flex;"><span>    subset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;validation&#39;</span>,
+</span></span><span style="display:flex;"><span>    shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    class_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test_generator <span style="color:#f92672">=</span> test_image_gen<span style="color:#f92672">.</span>flow_from_directory(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;test&#39;</span>,
+</span></span><span style="display:flex;"><span>    target_size<span style="color:#f92672">=</span>image_size,
+</span></span><span style="display:flex;"><span>    batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    seed<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>,
+</span></span><span style="display:flex;"><span>    class_mode<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>    shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h1 id="resnet-model">ResNet Model</h1>
+<p>We will be using the pretrained <a href="https://keras.io/applications/#resnetv2">ResNet152V2</a> model from Keras for our classification task. This model is a great starting point for transfer learning because of its depth, flexibility, and performance on image classification.</p>
+<p>The ResNet152V2 model is a <a href="https://arxiv.org/abs/1605.07146">wide residual network</a> that is trained on the <a href="https://www.image-net.org/">ImageNet</a> dataset. This dataset contains images that are 224x224 pixels, so we rescaled our dog and cat images to 224x224 pixels to make the model feel at home :)</p>
+<p>We can initiate the ResNet model with a simple code chunk in Keras. We set the <code>weights</code> parameter to &lsquo;imagenet&rsquo; to load the pretrained weights of the model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>resnet <span style="color:#f92672">=</span> ResNet152V2(
+</span></span><span style="display:flex;"><span>    include_top<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>    weights<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;imagenet&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>len(resnet<span style="color:#f92672">.</span>layers)
+</span></span></code></pre></div><p>Checking the layer depth shows 564 trainable layers within the model. As a starting point, we will freeze the first 95% of the layers to retain the bulk of the pretrained model complexity. The remaining 5% will be set to trainable so that our model can fit to our cat and dog images.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 564 resnet layers total</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> resnet<span style="color:#f92672">.</span>layers[:<span style="color:#ae81ff">535</span>]:
+</span></span><span style="display:flex;"><span>    layer<span style="color:#f92672">.</span>trainable <span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> resnet<span style="color:#f92672">.</span>layers[<span style="color:#ae81ff">535</span>:]:
+</span></span><span style="display:flex;"><span>    layer<span style="color:#f92672">.</span>trainable<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span></code></pre></div><p>Next, we will add a global average pooling layer and a dense fully connected layer to our model. The pooling layer will summarize our feature maps and the dense layer will make predictions using a sigmoid activation function to map predictions to probabilities between 0 and 1.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#f92672">=</span> resnet<span style="color:#f92672">.</span>output
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> layers<span style="color:#f92672">.</span>GlobalAveragePooling2D()(x)
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sigmoid&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs <span style="color:#f92672">=</span> resnet<span style="color:#f92672">.</span>input, outputs <span style="color:#f92672">=</span> predictions)
+</span></span></code></pre></div><p>To improve our model tuning and performance, we will use the <code>Adam</code> optimizer and the <code>binary_crossentropy</code> loss function to measure validation error against the 20% of training images we set aside for validation. Because this is a transfer learning problem, we will set adam&rsquo;s learning rate to 0.0005, since fast learning is not needed for the 5% of layers we are training.</p>
+<p>We will also implement early stopping and learning rate decay to prevent overfitting as the model begins to fit our data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>LR <span style="color:#f92672">=</span> keras<span style="color:#f92672">.</span>callbacks<span style="color:#f92672">.</span>ReduceLROnPlateau(monitor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;val_accuracy&#39;</span>, patience<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, factor<span style="color:#f92672">=</span><span style="color:#ae81ff">.5</span>, min_lr<span style="color:#f92672">=</span><span style="color:#ae81ff">.00001</span>)
+</span></span><span style="display:flex;"><span>EarlyStop <span style="color:#f92672">=</span> keras<span style="color:#f92672">.</span>callbacks<span style="color:#f92672">.</span>EarlyStopping(monitor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;val_accuracy&#39;</span>, patience<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, restore_best_weights<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0005</span>),
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;binary_crossentropy&#34;</span>,
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;accuracy&#34;</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="model-training">Model Training</h2>
+<p>Finally, we can fit our model to our training data. The validation results will be saved to the <code>history</code> object.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(
+</span></span><span style="display:flex;"><span>    train_generator,
+</span></span><span style="display:flex;"><span>    epochs<span style="color:#f92672">=</span>epochs,
+</span></span><span style="display:flex;"><span>    callbacks<span style="color:#f92672">=</span>[EarlyStop, LR],
+</span></span><span style="display:flex;"><span>    validation_data<span style="color:#f92672">=</span>val_generator
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>The final model results printed to the console show the model achieved an accuracy of 0.988 on its 12th pass through the data.</p>
+<pre tabindex="0"><code>Epoch 12: ReduceLROnPlateau reducing learning rate to 3.125000148429535e-05.
+313/313 [==============================] - 107s 342ms/step - loss: 1.9357e-04 - accuracy: 0.9999 - val_loss: 0.0570 - val_accuracy: 0.9882 - lr: 6.2500e-05
+</code></pre><p>This will suit us fine for this competition. However, if we wanted to refine the model further we could use KerasTuner to optimize parameters further. Here are some parameters that we could refine in the future:</p>
+<ul>
+<li><code>Image_Size</code> = (224, 224)</li>
+<li><code>Batch_Size</code> = 64</li>
+<li><code>Learning_Rate_init</code> = 0.0005</li>
+<li>Frozen Resnet Layers = [:535]</li>
+</ul>
+<p>Before we move on, lets make sure to save our model to disk so we can use it later without retraining.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Save Model</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;resnet152v2&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Zip model in Colab</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span>zip <span style="color:#f92672">-</span>r <span style="color:#f92672">/</span>content<span style="color:#f92672">/</span>resnet152v2<span style="color:#f92672">.</span>zip <span style="color:#f92672">/</span>content<span style="color:#f92672">/</span>resnet152v2
+</span></span></code></pre></div><p>Now, if we wished to import our trained model into our notebook, we can use the following code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Load Model</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>load_model(<span style="color:#e6db74">&#39;resnet152v2&#39;</span>)
+</span></span></code></pre></div><h1 id="model-evaluation">Model Evaluation</h1>
+<p>By examining the validation results saved to the <code>history</code> object, we can see that our model is performing well.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>acc <span style="color:#f92672">=</span> history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;accuracy&#39;</span>]
+</span></span><span style="display:flex;"><span>val_acc <span style="color:#f92672">=</span> history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;val_accuracy&#39;</span>]
+</span></span><span style="display:flex;"><span>loss <span style="color:#f92672">=</span> history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;loss&#39;</span>]
+</span></span><span style="display:flex;"><span>val_loss <span style="color:#f92672">=</span> history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;val_loss&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>n_ep <span style="color:#f92672">=</span> len(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;loss&#39;</span>])
+</span></span><span style="display:flex;"><span>epochs_range <span style="color:#f92672">=</span> range(n_ep)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">15</span>))
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(epochs_range, acc, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Training Accuracy&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(epochs_range, val_acc, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Validation Accuracy&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower right&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Training and Validation Accuracy&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(epochs_range, loss, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Training Loss&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(epochs_range, val_loss, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Validation Loss&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend(loc<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;upper right&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Training and Validation Loss&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><p><img src="/img/projects/accuracy.png" alt="model_evaluation"></p>
+<h2 id="validation-on-test-data">Validation on Test Data</h2>
+<p>Using the <code>test_generator</code> we setup previously, we can create predictions on the test data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(test_generator,verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span></code></pre></div><p>It is important for our Kaggle submission that the predictions are in numeric order, so we will reindex the predictions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>image_index <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> test_generator<span style="color:#f92672">.</span>filenames:
+</span></span><span style="display:flex;"><span>  image_index <span style="color:#f92672">+=</span> [int(s) <span style="color:#66d9ef">for</span> s <span style="color:#f92672">in</span> re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;\b\d+\b&#39;</span>, i)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(image_index[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">10</span>])
+</span></span></code></pre></div><p>We can now use the <code>pandas</code> library to create a dataframe of our predictions along with the associated image id.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pred_tuples <span style="color:#f92672">=</span> list(zip(image_index, predictions<span style="color:#f92672">.</span>flatten()<span style="color:#f92672">.</span>tolist()))
+</span></span><span style="display:flex;"><span>pred <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(pred_tuples, columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;id&#39;</span>,<span style="color:#e6db74">&#39;label&#39;</span>])
+</span></span><span style="display:flex;"><span>pred <span style="color:#f92672">=</span> pred<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;id&#39;</span>)
+</span></span><span style="display:flex;"><span>print(pred[:<span style="color:#ae81ff">5</span>])
+</span></span></code></pre></div><p>Results:</p>
+<pre tabindex="0"><code>      id         label
+0      1  9.999999e-01
+3612   2  1.000000e+00
+4723   3  9.999992e-01
+5834   4  1.000000e+00
+6945   5  4.059837e-07
+</code></pre><p>Before we submit to Kaggle, we can use a trick I found from <a href="https://medium.com/@egor_vorobiev/how-to-improve-log-loss-score-kaggle-trick-3f95577839f1">Egor Vorobiev</a> that can help improve our Kaggle score.</p>
+<p>Because the automated evaluation uses log-loss scoring, we can clip our predictions to a limited range so that we are not penalized for overconfident predictions near the edge of the probability distribution.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># clip predictions</span>
+</span></span><span style="display:flex;"><span>pred[<span style="color:#e6db74">&#39;label&#39;</span>] <span style="color:#f92672">=</span> pred[<span style="color:#e6db74">&#39;label&#39;</span>]<span style="color:#f92672">.</span>clip(<span style="color:#ae81ff">0.005</span>, <span style="color:#ae81ff">0.995</span>)
+</span></span></code></pre></div><p>Finally, we can save our dataframe to a csv file and submit it directly to the Kaggle competition.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pred<span style="color:#f92672">.</span>to_csv(<span style="color:#e6db74">&#39;result.csv&#39;</span>, index<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">!</span>kaggle competitions submit <span style="color:#f92672">-</span>c dogs<span style="color:#f92672">-</span>vs<span style="color:#f92672">-</span>cats<span style="color:#f92672">-</span>redux<span style="color:#f92672">-</span>kernels<span style="color:#f92672">-</span>edition <span style="color:#f92672">-</span>f result<span style="color:#f92672">.</span>csv <span style="color:#f92672">-</span>m <span style="color:#e6db74">&#34;Message&#34;</span>
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>Our final Kaggle score is a log-loss of 0.05538. This places us in the top 8% of <a href="https://www.kaggle.com/competitions/dogs-vs-cats-redux-kernels-edition/leaderboard">submissions</a> in an expired competition. Not bad!</p>
+<p>So what did we learn along the way?</p>
+<ul>
+<li>Don&rsquo;t reinvent the wheel
+<ul>
+<li>The ResNet architecture is already great at image classification, there&rsquo;s no harm in borrowing existing models as a starting point for a more focused task.</li>
+</ul>
+</li>
+<li>Plan ahead
+<ul>
+<li>Keras offers many different routes to ingesting data. <a href="https://towardsdatascience.com/what-is-the-best-input-pipeline-to-train-image-classification-models-with-tf-keras-eb3fe26d3cc5">This article</a> does a great job of explaining the pros and cons of each approach, but had I not researched these methods prior I would have lost a lot of time chasing the wrong approach.</li>
+</ul>
+</li>
+</ul>
+<pre tabindex="0"><code> _______  __   __  _______  __    _  ___   _  _______
+|       ||  | |  ||   _   ||  |  | ||   | | ||       |
+|_     _||  |_|  ||  |_|  ||   |_| ||   |_| ||  _____|
+  |   |  |       ||       ||       ||      _|| |_____
+  |   |  |       ||       ||  _    ||     |_ |_____  |
+  |   |  |   _   ||   _   || | |   ||    _  | _____| |
+  |___|  |__| |__||__| |__||_|  |__||___| |_||_______|
+ _______  _______  ______
+|       ||       ||    _ |
+|    ___||   _   ||   | ||
+|   |___ |  | |  ||   |_||_
+|    ___||  |_|  ||    __  |
+|   |    |       ||   |  | |
+|___|    |_______||___|  |_|
+ ______    _______  _______  ______   ___   __    _  _______
+|    _ |  |       ||   _   ||      | |   | |  |  | ||       |
+|   | ||  |    ___||  |_|  ||  _    ||   | |   |_| ||    ___|
+|   |_||_ |   |___ |       || | |   ||   | |       ||   | __
+|    __  ||    ___||       || |_|   ||   | |  _    ||   ||  |
+|   |  | ||   |___ |   _   ||       ||   | | | |   ||   |_| |
+|___|  |_||_______||__| |__||______| |___| |_|  |__||_______|
+</code></pre>
     </div>
     
       
