@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright> </copyright>
-    <lastBuildDate>Fri, 06 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://gbarland.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://gbarland.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cats vs. Dogs Image Classifier</title>
+      <link>https://gbarland.github.io/projects/catsvsdogs/</link>
+      <pubDate>Tue, 10 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://gbarland.github.io/projects/catsvsdogs/</guid>
+      <description>Introduction In this project, I will be answering the most pressing question of our generation: How do we distinguish between images of cats and dogs?
+In all seriousness, this is a great problem to explore the potential of deep learning and specifically, transfer learning on a simple task of classifying between images of cats and dogs.
+The tools I will be using in this project are:
+ Python  Typical Data Science tools such as Pandas, Numpy, and Matplotlib   Keras  High level library built on top of Tensorflow for creating neural networks   TensorFlow  The underlying library for Keras used for deep learning computation   Kaggle  The competition site for this project.</description>
+    </item>
+    
     <item>
       <title>AWS Fraud Detection</title>
       <link>https://gbarland.github.io/projects/awsfraudproject/</link>
@@ -18,18 +30,6 @@
 Why Fraud? In 2021, credit card fraud grew to the largest ever, with 393,207 reports of credit card fraud filed. This poses a major risk for lenders and borrowers alike, and cloud based analytics are a great solution to uncover this problem.
 Dataset https://www.kaggle.com/datasets/kartik2112/fraud-detection
 This is a simulated credit card transaction dataset containing legitimate and fraud transactions from the duration 1st Jan 2019 - 31st Dec 2020.</description>
-    </item>
-    
-    <item>
-      <title>Cats vs. Dogs Image Classifier</title>
-      <link>https://gbarland.github.io/projects/catsvsdogs/</link>
-      <pubDate>Wed, 06 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://gbarland.github.io/projects/catsvsdogs/</guid>
-      <description>Introduction In this project, I will be answering the most pressing question of our generation: How do we distinguish between images of cats and dogs?
-In all seriousness, this is a great problem to explore the potential of deep learning and specifically, transfer learning on a simple task of classifying between images of cats and dogs.
-The tools I will be using in this project are:
- Python  Typical Data Science tools such as Pandas, Numpy, and Matplotlib   Keras  High level library built on top of Tensorflow for creating neural networks   TensorFlow  The underlying library for Keras used for deep learning computation   Kaggle  The competition site for this project.</description>
     </item>
     
   </channel>
