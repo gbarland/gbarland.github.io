@@ -17,7 +17,7 @@
       <description>Introduction In this project, I will be answering the most pressing question of our generation: How do we distinguish between images of cats and dogs?
 In all seriousness, this is a great problem to explore the potential of deep learning and specifically, transfer learning on a simple task of classifying between images of cats and dogs.
 The tools I will be using in this project are:
- Python  Typical Data Science tools such as Pandas, Numpy, and Matplotlib   Keras  High level library built on top of Tensorflow for creating neural networks   TensorFlow  The underlying library for Keras used for deep learning computation   Kaggle  The competition site for this project.</description>
+Python Typical Data Science tools such as Pandas, Numpy, and Matplotlib Keras High level library built on top of Tensorflow for creating neural networks TensorFlow The underlying library for Keras used for deep learning computation Kaggle The competition site for this project.</description>
     </item>
     
     <item>
@@ -57,6 +57,15 @@ This is a simulated credit card transaction dataset containing legitimate and fr
       
       <guid>https://gbarland.github.io/art/1/</guid>
       <description>-Code</description>
+    </item>
+    
+    <item>
+      <title>noise</title>
+      <link>https://gbarland.github.io/art/2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://gbarland.github.io/art/2/</guid>
+      <description> </description>
     </item>
     
   </channel>
