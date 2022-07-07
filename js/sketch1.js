@@ -1,38 +1,69 @@
-  
-  function smoothstep(edge0, edge1, x) {
-    t = constrain((x - edge0)/(edge1 - edge0), 0.0, 1.0);
-    return t * t * (3.0 - 2.0 * t);
-  }
-  
-  let noiseScale=0.02;
+let r = 200;
+let noiseScale = r/5;
+let step1 = 0;
+let step2 = 5;
+let step3 = 10;
 
-  function draw() {
-    background(41,42,45);
-    translate(width/2,height/2);
-    steps = min(width, height)/4.5;
-    stroke(194, 69, 108);
-    strokeWeight(1);
-    noFill();
-    let mx = (mouseX || width/2)/width*1000;
-    let my = (mouseY || height/2)/height*1000;
-    beginShape();
-    vertex(0, 0, 0);
-    for (let i = 0; i < steps/4.5; i++) {
-      let radius = smoothstep(0, steps/2.5, i) * height;
-      let x = sin(frameCount*i/mx)*(radius);
-      let y = cos(frameCount*i/my)*(radius);
-      let z = cos(frameCount * i / 1000.0) * (radius / 10.0);
-      let noiseVal = noise(mouseX*mouseY*noiseScale);
-      curveVertex(x+noiseVal, y+noiseVal, z+noiseVal);
-    }
-    endShape();
-  }
-  
-
+let density;
+let densitySlider;
+let magnitude;
+let magnitudeSlider;
 
 function setup() {
-  var canvas = createCanvas(500, 500);
+  var canvas = createCanvas(600, 600, WEBGL);
   canvas.parent('sketch-holder');
+  angleMode(DEGREES);
+  
+  stroke(194, 69, 108);
+  strokeWeight(1);
+  noFill();
+  
+  density = createDiv();
+  densitySlider = createSlider(3, 55, 28, 1)//min, max, default, stepsize
+  
+  magnitude = createDiv();
+  magnitudeSlider = createSlider(0.25, 2, 1, 0.25)//min, max, default, stepsize
 }
 
+function draw() {
+  background(41,42,45);
+  orbitControl(2, 2);
+  step1 += 0.001;
+  step2 += 0.001;
+  step3 += 0.001;
+  let noiseVal1 = noise(step1)*noiseScale - (noiseScale/2)
+  let noiseVal2 = noise(step2)*noiseScale - (noiseScale/2)
   
+  // thing 1
+  for(let phi = 0; phi < 180; phi += 180/densitySlider.value()){
+    beginShape();
+    for(let theta = 0; theta < 360; theta += 360/densitySlider.value()){      
+      let noiseVal1a = (noise(theta*noiseVal1/100)*noiseScale) - (noiseScale/2)
+      let x = (r + noiseVal1a*magnitudeSlider.value()) * cos(phi);
+      let y = (r + noiseVal1a*magnitudeSlider.value()) * sin(phi) * sin(theta);
+      let z = (r + noiseVal1a*magnitudeSlider.value()) * sin(phi) * cos(theta);
+      vertex(x, y, z);
+    }
+    endShape(CLOSE);
+  }
+  
+  // thing 2
+  for(let phi = 0; phi < 180; phi += 180/densitySlider.value()){
+    beginShape();
+    for(let theta = 0; theta < 360; theta += 360/densitySlider.value()){      
+      let noiseVal2a = (noise(theta*noiseVal2/100)*noiseScale) - (noiseScale/2)
+      let x = (r + noiseVal2a*magnitudeSlider.value()) * cos(phi);
+      let y = (r + noiseVal2a*magnitudeSlider.value()) * sin(phi) * sin(theta);
+      let z = (r + noiseVal2a*magnitudeSlider.value()) * sin(phi) * cos(theta);
+      vertex(y, z, x);
+    }
+    endShape(CLOSE);
+  }
+  
+  
+  let displayDensity = int(map(densitySlider.value(), 3, 62, 1, 60));
+  density.html("Density value: " + displayDensity);
+  
+  let displayMagnitude = magnitudeSlider.value();
+  magnitude.html("Noise value: " + displayMagnitude);
+}
