@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>FaceBook Comment Sentiment Classifier with BERT :: barland.net</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="Introduction In this project, I will be designing a text classification model to help distinguish between three types of FaceBook comments:
+ Appreciation Complaints Feedback      message Appreciation Complaint Feedback     30 ugh 0 1 0   931 What are you lining your cans with? 0 0 1   596 me with my hershey cake :) 1 0 0   434 I can has free 8x10?"/>
+<meta name="keywords" content="hmm"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="https://gbarland.github.io/projects/bertclassifier/" />
+
+
+
+
+
+<link rel="stylesheet" href="https://gbarland.github.io/assets/style.css">
+
+
+<link rel="stylesheet" href="https://gbarland.github.io/style.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://gbarland.github.io/img/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="https://gbarland.github.io/img/favicon.png">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="FaceBook Comment Sentiment Classifier with BERT"/>
+<meta name="twitter:description" content="Comment Classification problem using BERT Natural Language Processing"/>
+
+
+
+<meta property="og:title" content="FaceBook Comment Sentiment Classifier with BERT" />
+<meta property="og:description" content="Comment Classification problem using BERT Natural Language Processing" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gbarland.github.io/projects/bertclassifier/" /><meta property="article:section" content="Projects" />
+<meta property="article:published_time" content="2022-08-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-08-01T00:00:00+00:00" /><meta property="og:site_name" content="barland.net" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a href="/" class="logo" style="text-decoration: none;">
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367"/>
+</svg>
+</span>
+    <span class="logo__text">Grant Barland</span>
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/art">Art</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
+        
+      
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/art">Art</a></li>
+      
+    
+      
+        <li><a href="/projects">Projects</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h2 class="post-title"><a href="https://gbarland.github.io/projects/bertclassifier/">FaceBook Comment Sentiment Classifier with BERT</a></h2>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2022-08-01
+        </span>
+
+        
+          
+        
+      
+
+      
+      
+    </div>
+
+    
+
+
+    
+      
+        <img src="https://gbarland.github.io/img/projects/BERT/transformer.png" class="post-cover" />
+      
+    
+
+    <div class="post-content">
+      <h1 id="introduction">Introduction</h1>
+<p>In this project, I will be designing a text classification model to help distinguish between three types of FaceBook comments:</p>
+<ul>
+<li>Appreciation</li>
+<li>Complaints</li>
+<li>Feedback</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:left">message</th>
+<th style="text-align:right">Appreciation</th>
+<th style="text-align:right">Complaint</th>
+<th style="text-align:right">Feedback</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">30</td>
+<td style="text-align:left">ugh</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">931</td>
+<td style="text-align:left">What are you lining your cans with?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:right">596</td>
+<td style="text-align:left">me with my hershey cake :)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">434</td>
+<td style="text-align:left">I can has free 8x10?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+</tr>
+</tbody>
+</table>
+<p>The model will be trained on a dataset of 7,961 comments. The classifier will use the <a href="https://arxiv.org/abs/1810.04805">BERT</a> architecture, which is a state-of-the-art Natural Language Processing model. The model will be trained on a GPU using the <a href="https://pytorch.org/">PyTorch</a> framework.</p>
+<p>The goal of this project is to build a classifier that achieves the highest predictive performance on a hidden dataset of 2,039 comments.</p>
+<p>The model will be evaluated on the following metrics:</p>
+<ul>
+<li>Precision</li>
+<li>Recall</li>
+<li>F1 Score</li>
+</ul>
+<p>The tools I will be using in this project are:</p>
+<ul>
+<li><a href="https://www.python.org/">Python</a>
+<ul>
+<li>Typical Data Science tools such as <a href="https://pandas.pydata.org/">Pandas</a>, <a href="https://www.numpy.org/">Numpy</a></li>
+</ul>
+</li>
+<li><a href="https://pytorch.org/">PyTorch</a>
+<ul>
+<li>Machine Learning framework for training the model</li>
+</ul>
+</li>
+<li><a href="https://huggingface.co/transformers/">Transformers Library</a>
+<ul>
+<li>HuggingFace&rsquo;s library for using pretrained BERT models</li>
+</ul>
+</li>
+<li><a href="https://colab.research.google.com/">Google Colab</a>
+<ul>
+<li>A Google-hosted cloud platform for running Jupyter notebooks. Useful when coding away from home, or in need of a high end GPU for deep learning</li>
+</ul>
+</li>
+</ul>
+<p>The steps I will be taking in this project are:</p>
+<ol>
+<li>Import the data from local environment into Google Colab Environment</li>
+<li>Preprocess the data for PyTorch</li>
+<li>Setup and Train the BERT Pipeline</li>
+<li>Evaluate the classifier on the test set</li>
+</ol>
+<h2 id="importing-the-data">Importing the Data</h2>
+<p>Here is an overview of the libraries needed for the project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tqdm.notebook <span style="color:#f92672">import</span> tqdm
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> BertTokenizer, AdamW, BertForSequenceClassification, get_linear_schedule_with_warmup
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.utils.data <span style="color:#f92672">import</span> TensorDataset, DataLoader, RandomSampler, SequentialSampler
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> BertForSequenceClassification
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> google.colab <span style="color:#f92672">import</span> files
+</span></span></code></pre></div><p>Before we can begin, we will need to upload the data to the Google Colab environment. The data is stored in a CSV file, so we will use the <code>files</code> library to manually upload the unlabeled and labeled datasets.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># running this code in Google Colab will prompt you to upload the data</span>
+</span></span><span style="display:flex;"><span>uploaded <span style="color:#f92672">=</span> files<span style="color:#f92672">.</span>upload()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># read labeled data into a pandas dataframe</span>
+</span></span><span style="display:flex;"><span>df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#39;FB_posts_labeled.txt&#39;</span>, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># read unlabeled data into a pandas dataframe</span>
+</span></span><span style="display:flex;"><span>df_test <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#39;FB_posts_unlabeled.txt&#39;</span>, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><h2 id="data-preparation">Data Preparation</h2>
+<p>In order to train the model, we will need to:</p>
+<ul>
+<li>encode the output label columns into one integer value column (0, 1, 2).</li>
+<li>split the data into training and validation sets.
+<ul>
+<li>We will use the <code>train_test_split</code> function from the <code>sklearn</code> library to do this.</li>
+</ul>
+</li>
+<li>tokenize the text data
+<ul>
+<li>We will use the <code>BertTokenizer</code> class from the <code>transformers</code> library to do this.</li>
+</ul>
+</li>
+<li>convert the data into PyTorch tensors
+<ul>
+<li>this is the data type that the model will be trained on.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># create labels for classification</span>
+</span></span><span style="display:flex;"><span>label_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;Appreciation&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;Complaint&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;Feedback&#39;</span>: <span style="color:#ae81ff">2</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># create label column that encodes labels based on dict values</span>
+</span></span><span style="display:flex;"><span>conds <span style="color:#f92672">=</span> [df<span style="color:#f92672">.</span>Appreciation <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, df<span style="color:#f92672">.</span>Complaint <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>, df<span style="color:#f92672">.</span>Feedback <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>choices <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>df[<span style="color:#e6db74">&#39;label&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>select(conds, choices, default<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># drop old columns</span>
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">.</span>drop(columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;Appreciation&#39;</span>, <span style="color:#e6db74">&#39;Complaint&#39;</span>, <span style="color:#e6db74">&#39;Feedback&#39;</span>, <span style="color:#e6db74">&#39;postId&#39;</span>], inplace<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>df
+</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th style="text-align:right"></th>
+<th style="text-align:left">message</th>
+<th style="text-align:right">label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">2563</td>
+<td style="text-align:left">Along with so many others, it&rsquo;s &ldquo;Goodbye Macy&rsquo;s&rdquo; for me until they give Trump the axe.</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:right">2601</td>
+<td style="text-align:left">My aunt loaded all of her Easter photos onto the CVS photo website. Is there a way to output them back to the computer?</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td style="text-align:right">4778</td>
+<td style="text-align:left">i have over 7000 fb friends and followers on twitter. i will not stop until they&rsquo;ve all heard about my poor and inefficient treatment.</td>
+<td style="text-align:right">1</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># split data into training and validation sets, with stratification</span>
+</span></span><span style="display:flex;"><span>X_train, X_val, y_train, y_val <span style="color:#f92672">=</span> train_test_split(df<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>values, df<span style="color:#f92672">.</span>label<span style="color:#f92672">.</span>values, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.15</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>, stratify<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>label<span style="color:#f92672">.</span>values, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;length of training data: </span><span style="color:#e6db74">{</span>len(X_train)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;length of testing data: </span><span style="color:#e6db74">{</span>len(X_val)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>length of training data: 6766</p>
+<p>length of testing data: 1195</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># verify that the training and validation sets are stratified</span>
+</span></span><span style="display:flex;"><span>pd<span style="color:#f92672">.</span>Series(y_train)<span style="color:#f92672">.</span>value_counts(normalize<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>pd<span style="color:#f92672">.</span>Series(y_val)<span style="color:#f92672">.</span>value_counts(normalize<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><p>53% of data is complaints, minority classes are Appreciation and Feedback</p>
+<h2 id="creating-embeddings">Creating Embeddings</h2>
+<p>The BERT model requires that the input data be tokenized and converted into embeddings. The <code>BertTokenizer</code> class from the <code>transformers</code> library will be used to do this. The <code>BertTokenizer</code> class will:</p>
+<ul>
+<li>tokenize the text data</li>
+<li>convert the tokens into embeddings</li>
+<li>add special tokens to the beginning and end of the sequence</li>
+<li>pad the sequences to a maximum length</li>
+<li>create attention masks for the padded tokens</li>
+</ul>
+<p>We will use &lsquo;cased&rsquo; version of BERT in case capitalized comments contain info about sentiment (e.g. Anger)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Download pretrained BERT tokenizer for embeddings</span>
+</span></span><span style="display:flex;"><span>tokenizer <span style="color:#f92672">=</span> BertTokenizer<span style="color:#f92672">.</span>from_pretrained(<span style="color:#e6db74">&#39;bert-base-cased&#39;</span>,
+</span></span><span style="display:flex;"><span>                                          do_lower_case<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span></code></pre></div><p>The longest text in our dataset is over 512 tokens long. We will set the maximum length to 512 tokens, since this is the limit for BERT and enable truncation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># set max length to 512 tokens</span>
+</span></span><span style="display:flex;"><span>max_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># tokenize and encode sequences in the training set</span>
+</span></span><span style="display:flex;"><span>encoded_data_train <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>batch_encode_plus(
+</span></span><span style="display:flex;"><span>    df[df<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>isin(X_train)]<span style="color:#f92672">.</span>message<span style="color:#f92672">.</span>values,
+</span></span><span style="display:flex;"><span>    add_special_tokens<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    return_attention_mask<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    pad_to_max_length<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    max_length<span style="color:#f92672">=</span>max_len,
+</span></span><span style="display:flex;"><span>    return_tensors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pt&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># tokenize and encode sequences in the validation set</span>
+</span></span><span style="display:flex;"><span>encoded_data_val <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>batch_encode_plus(
+</span></span><span style="display:flex;"><span>    df[df<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>isin(X_val)]<span style="color:#f92672">.</span>message<span style="color:#f92672">.</span>values,
+</span></span><span style="display:flex;"><span>    add_special_tokens<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    return_attention_mask<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    pad_to_max_length<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    max_length<span style="color:#f92672">=</span>max_len,
+</span></span><span style="display:flex;"><span>    return_tensors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pt&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># tokenize and encode sequences in the test set</span>
+</span></span><span style="display:flex;"><span>encoded_data_test <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>batch_encode_plus(
+</span></span><span style="display:flex;"><span>    df_test<span style="color:#f92672">.</span>message<span style="color:#f92672">.</span>values,
+</span></span><span style="display:flex;"><span>    add_special_tokens<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    return_attention_mask<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    pad_to_max_length<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>    max_length<span style="color:#f92672">=</span>max_len,
+</span></span><span style="display:flex;"><span>    return_tensors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pt&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="creating-pytorch-data-tensors">Creating PyTorch Data Tensors</h2>
+<p>We will use the <code>TensorDataset</code> class from the <code>torch.utils.data</code> library to create the PyTorch data tensors. The <code>TensorDataset</code> class will:</p>
+<ul>
+<li>convert the input ids, attention masks, and labels into PyTorch tensors</li>
+<li>create a dataset from the tensors</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># convert the training set into a TensorDataset</span>
+</span></span><span style="display:flex;"><span>input_ids_train <span style="color:#f92672">=</span> encoded_data_train[<span style="color:#e6db74">&#39;input_ids&#39;</span>]
+</span></span><span style="display:flex;"><span>attention_masks_train <span style="color:#f92672">=</span> encoded_data_train[<span style="color:#e6db74">&#39;attention_mask&#39;</span>]
+</span></span><span style="display:flex;"><span>labels_train <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>tensor(df[df<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>isin(X_train)]<span style="color:#f92672">.</span>label<span style="color:#f92672">.</span>values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataset_train <span style="color:#f92672">=</span> TensorDataset(input_ids_train, attention_masks_train, labels_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># convert the validation set into a TensorDataset</span>
+</span></span><span style="display:flex;"><span>input_ids_val <span style="color:#f92672">=</span> encoded_data_val[<span style="color:#e6db74">&#39;input_ids&#39;</span>]
+</span></span><span style="display:flex;"><span>attention_masks_val <span style="color:#f92672">=</span> encoded_data_val[<span style="color:#e6db74">&#39;attention_mask&#39;</span>]
+</span></span><span style="display:flex;"><span>labels_val <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>tensor(df[df<span style="color:#f92672">.</span>index<span style="color:#f92672">.</span>isin(X_val)]<span style="color:#f92672">.</span>label<span style="color:#f92672">.</span>values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataset_val <span style="color:#f92672">=</span> TensorDataset(input_ids_val, attention_masks_val, labels_val)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># convert the test set into a TensorDataset</span>
+</span></span><span style="display:flex;"><span>input_ids_test <span style="color:#f92672">=</span> encoded_data_test[<span style="color:#e6db74">&#39;input_ids&#39;</span>]
+</span></span><span style="display:flex;"><span>attention_masks_test <span style="color:#f92672">=</span> encoded_data_test[<span style="color:#e6db74">&#39;attention_mask&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataset_test <span style="color:#f92672">=</span> TensorDataset(input_ids_test, attention_masks_test)
+</span></span></code></pre></div><h2 id="creating-data-loaders">Creating Data Loaders</h2>
+<p>We will use the <code>DataLoader</code> class from the <code>torch.utils.data</code> library to create the data loaders. The <code>DataLoader</code> class will:</p>
+<ul>
+<li>shuffle the data</li>
+<li>create batches of data</li>
+<li>load the data into the GPU</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># create the DataLoaders for our training and validation sets</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># set batch size to 8</span>
+</span></span><span style="display:flex;"><span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataloader_train <span style="color:#f92672">=</span> DataLoader(dataset_train,
+</span></span><span style="display:flex;"><span>                              shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>                              batch_size<span style="color:#f92672">=</span>batch_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataloader_validation <span style="color:#f92672">=</span> DataLoader(dataset_val,
+</span></span><span style="display:flex;"><span>                                   shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>                                   batch_size<span style="color:#f92672">=</span>batch_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dataloader_test <span style="color:#f92672">=</span> DataLoader(dataset_test,
+</span></span><span style="display:flex;"><span>                              shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                              batch_size<span style="color:#f92672">=</span>batch_size)
+</span></span></code></pre></div><h2 id="creating-the-bert-classifier">Creating the BERT Classifier</h2>
+<p>We will use the <code>BertForSequenceClassification</code> class from the <code>transformers</code> library to create the BERT classifier. The <code>BertForSequenceClassification</code> class will:</p>
+<ul>
+<li>load the pretrained BERT model</li>
+<li>add a dropout layer</li>
+<li>add a dense layer</li>
+<li>add a softmax activation function</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># load the pretrained BERT model</span>
+</span></span><span style="display:flex;"><span>bert <span style="color:#f92672">=</span> BertForSequenceClassification<span style="color:#f92672">.</span>from_pretrained(<span style="color:#e6db74">&#39;bert-base-cased&#39;</span>,
+</span></span><span style="display:flex;"><span>                                                     num_labels<span style="color:#f92672">=</span>len(label_dict),
+</span></span><span style="display:flex;"><span>                                                     output_attentions<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                                                     output_hidden_states<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span></code></pre></div><h2 id="creating-the-optimizer">Creating the Optimizer</h2>
+<p>We will use the <code>AdamW</code> class from the <code>transformers</code> library to create the optimizer. The <code>AdamW</code> class will:</p>
+<ul>
+<li>create the Adam optimizer</li>
+<li>apply weight decay to the parameters</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># create the optimizer</span>
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> AdamW(bert<span style="color:#f92672">.</span>parameters(),
+</span></span><span style="display:flex;"><span>                  lr<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-5</span>,
+</span></span><span style="display:flex;"><span>                  eps<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-8</span>)
+</span></span></code></pre></div><h2 id="creating-the-learning-rate-scheduler">Creating the Learning Rate Scheduler</h2>
+<p>We will use the <code>get_linear_schedule_with_warmup</code> function from the <code>transformers</code> library to create the learning rate scheduler. The <code>get_linear_schedule_with_warmup</code> function will:</p>
+<ul>
+<li>create the learning rate scheduler</li>
+<li>set the initial learning rate</li>
+<li>set the number of warmup steps</li>
+<li>set the number of training steps</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># get the number of training epochs</span>
+</span></span><span style="display:flex;"><span>epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># total number of training steps is number of batches * number of epochs</span>
+</span></span><span style="display:flex;"><span>total_steps <span style="color:#f92672">=</span> len(dataloader_train) <span style="color:#f92672">*</span> epochs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># create the learning rate scheduler</span>
+</span></span><span style="display:flex;"><span>scheduler <span style="color:#f92672">=</span> get_linear_schedule_with_warmup(optimizer,
+</span></span><span style="display:flex;"><span>                                            num_warmup_steps<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>                                            num_training_steps<span style="color:#f92672">=</span>total_steps)
+</span></span></code></pre></div><h2 id="defining-the-performance-metrics">Defining the Performance Metrics</h2>
+<p>We will use the <code>accuracy_score</code> function from the <code>sklearn.metrics</code> library to calculate the accuracy. We will also use the <code>f1_score</code> function from the <code>sklearn.metrics</code> library to calculate the F1 score.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># function to calculate the accuracy of our predictions vs labels</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">accuracy_per_class</span>(preds, labels):
+</span></span><span style="display:flex;"><span>    label_dict_inverse <span style="color:#f92672">=</span> {v: k <span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> label_dict<span style="color:#f92672">.</span>items()}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    preds_flat <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(preds, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>flatten()
+</span></span><span style="display:flex;"><span>    labels_flat <span style="color:#f92672">=</span> labels<span style="color:#f92672">.</span>flatten()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> label <span style="color:#f92672">in</span> np<span style="color:#f92672">.</span>unique(labels_flat):
+</span></span><span style="display:flex;"><span>        y_preds <span style="color:#f92672">=</span> preds_flat[labels_flat<span style="color:#f92672">==</span>label]
+</span></span><span style="display:flex;"><span>        y_true <span style="color:#f92672">=</span> labels_flat[labels_flat<span style="color:#f92672">==</span>label]
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Class: </span><span style="color:#e6db74">{</span>label_dict_inverse[label]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Accuracy: </span><span style="color:#e6db74">{</span>len(y_preds[y_preds<span style="color:#f92672">==</span>label])<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>len(y_true)<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># function to calculate the F1 score of our predictions vs labels</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f1_score_func</span>(preds, labels):
+</span></span><span style="display:flex;"><span>    pred_flat <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(preds, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>flatten()
+</span></span><span style="display:flex;"><span>    labels_flat <span style="color:#f92672">=</span> labels<span style="color:#f92672">.</span>flatten()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> f1_score(labels_flat, pred_flat, average<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;weighted&#39;</span>)
+</span></span></code></pre></div><h2 id="evaluating-the-model">Evaluating the Model</h2>
+<p>We will define an <code>evaluate</code> function to evaluate the model on the validation set. The <code>evaluate</code> function will:</p>
+<ul>
+<li>put the model into evaluation mode</li>
+<li>initialize the loss and accuracy for this epoch</li>
+<li>iterate over the batches of the validation set</li>
+<li>load the batch into the GPU</li>
+<li>perform a forward pass</li>
+<li>calculate the loss</li>
+<li>update the loss and accuracy</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># function to train the model</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate</span>(dataloader_val):
+</span></span><span style="display:flex;"><span>  model<span style="color:#f92672">.</span>eval()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  loss_val_total <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># empty list to save model predictions</span>
+</span></span><span style="display:flex;"><span>  predictions, true_vals <span style="color:#f92672">=</span> [], []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># iterate over batches</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> batch <span style="color:#f92672">in</span> dataloader_val:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># load batch to GPU</span>
+</span></span><span style="display:flex;"><span>          batch <span style="color:#f92672">=</span> tuple(b<span style="color:#f92672">.</span>to(device) <span style="color:#66d9ef">for</span> b <span style="color:#f92672">in</span> batch)
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># unpack the inputs from our dataloader</span>
+</span></span><span style="display:flex;"><span>          inputs <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;input_ids&#39;</span>:      batch[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;attention_mask&#39;</span>: batch[<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;labels&#39;</span>:         batch[<span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>                  }
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># get model predictions for the current batch</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>              outputs <span style="color:#f92672">=</span> model(<span style="color:#f92672">**</span>inputs)
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># get the loss of the model predictions for the current batch</span>
+</span></span><span style="display:flex;"><span>          loss <span style="color:#f92672">=</span> outputs[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>          logits <span style="color:#f92672">=</span> outputs[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># add on to the total loss</span>
+</span></span><span style="display:flex;"><span>          loss_val_total <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># model predictions are stored on GPU. So, push it to CPU</span>
+</span></span><span style="display:flex;"><span>          logits <span style="color:#f92672">=</span> logits<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>          label_ids <span style="color:#f92672">=</span> inputs[<span style="color:#e6db74">&#39;labels&#39;</span>]<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># append the model predictions and true values</span>
+</span></span><span style="display:flex;"><span>          predictions<span style="color:#f92672">.</span>append(logits)
+</span></span><span style="display:flex;"><span>          true_vals<span style="color:#f92672">.</span>append(label_ids)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># compute the training loss of the epoch</span>
+</span></span><span style="display:flex;"><span>    loss_val_avg <span style="color:#f92672">=</span> loss_val_total<span style="color:#f92672">/</span>len(dataloader_val)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    predictions <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    true_vals <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(true_vals, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> loss_val_avg, predictions, true_vals
+</span></span></code></pre></div><p>Before we train the model, we will set seeds for reproducibility and verify that the GPU is available.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># set the seed for reproducibility</span>
+</span></span><span style="display:flex;"><span>seed_val <span style="color:#f92672">=</span> <span style="color:#ae81ff">17</span>
+</span></span><span style="display:flex;"><span>random<span style="color:#f92672">.</span>seed(seed_val)
+</span></span><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(seed_val)
+</span></span><span style="display:flex;"><span>torch<span style="color:#f92672">.</span>manual_seed(seed_val)
+</span></span><span style="display:flex;"><span>torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>manual_seed_all(seed_val)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># check if GPU is available</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>is_available():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># tell PyTorch to use the GPU</span>
+</span></span><span style="display:flex;"><span>    device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;There are </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> GPU(s) available.&#39;</span> <span style="color:#f92672">%</span> torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>device_count())
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;We will use the GPU:&#39;</span>, torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>get_device_name(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;No GPU available, using the CPU instead.&#39;</span>)
+</span></span><span style="display:flex;"><span>    device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cpu&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># push the model to GPU</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>to(device)
+</span></span></code></pre></div><h2 id="defining-the-training-loop">Defining the Training Loop</h2>
+<p>We will use the <code>train</code> function to define the training loop. The <code>train</code> function will:</p>
+<ul>
+<li>put the model into training mode</li>
+<li>initialize the loss and accuracy for this epoch</li>
+<li>iterate over the batches of the training set</li>
+<li>load the batch into the GPU</li>
+<li>clear the gradients</li>
+<li>perform a forward pass</li>
+<li>calculate the loss</li>
+<li>perform a backward pass</li>
+<li>clip the gradients to 1</li>
+<li>update the weights</li>
+<li>update the learning rate</li>
+<li>update the loss and accuracy</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># function to train the model</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> tqdm(range(epochs)):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># perform one full pass over the training set</span>
+</span></span><span style="display:flex;"><span>    model<span style="color:#f92672">.</span>train()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># initialize the loss and accuracy for this epoch</span>
+</span></span><span style="display:flex;"><span>    loss_train_total <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    progress_bar <span style="color:#f92672">=</span> tqdm(dataloader_train,
+</span></span><span style="display:flex;"><span>                        desc<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Epoch </span><span style="color:#e6db74">{:1d}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(epoch),
+</span></span><span style="display:flex;"><span>                        leave<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>                        disable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># iterate over batches</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> batch <span style="color:#f92672">in</span> progress_bar:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># clear previously calculated gradients</span>
+</span></span><span style="display:flex;"><span>        model<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># load batch to GPU</span>
+</span></span><span style="display:flex;"><span>        batch <span style="color:#f92672">=</span> tuple(b<span style="color:#f92672">.</span>to(device) <span style="color:#66d9ef">for</span> b <span style="color:#f92672">in</span> batch)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># unpack the inputs from our dataloader</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;input_ids&#39;</span>:      batch[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>                  <span style="color:#e6db74">&#39;attention_mask&#39;</span>: batch[<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>                  <span style="color:#e6db74">&#39;labels&#39;</span>:         batch[<span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>                 }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># get model predictions for the current batch</span>
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> model(<span style="color:#f92672">**</span>inputs)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># get the loss of the model predictions for the current batch</span>
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> outputs[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># add on to the total loss</span>
+</span></span><span style="display:flex;"><span>        loss_train_total <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># backward pass to calculate the gradients</span>
+</span></span><span style="display:flex;"><span>        loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># clip the the gradients to 1.0. It helps in preventing the exploding gradient problem</span>
+</span></span><span style="display:flex;"><span>        torch<span style="color:#f92672">.</span>nn<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>clip_grad_norm_(model<span style="color:#f92672">.</span>parameters(), <span style="color:#ae81ff">1.0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># update parameters</span>
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># update the learning rate</span>
+</span></span><span style="display:flex;"><span>        scheduler<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># update progress bar</span>
+</span></span><span style="display:flex;"><span>        progress_bar<span style="color:#f92672">.</span>set_postfix({<span style="color:#e6db74">&#39;training_loss&#39;</span>: <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{:.3f}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(loss<span style="color:#f92672">.</span>item()<span style="color:#f92672">/</span>len(batch))})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#save the mdoel at each epoch</span>
+</span></span><span style="display:flex;"><span>    torch<span style="color:#f92672">.</span>save(model<span style="color:#f92672">.</span>state_dict(), <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;finetuned_BERT_epoch_</span><span style="color:#e6db74">{</span>epoch<span style="color:#e6db74">}</span><span style="color:#e6db74">.model&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># compute the training loss of the epoch</span>
+</span></span><span style="display:flex;"><span>    loss_train_avg <span style="color:#f92672">=</span> loss_train_total<span style="color:#f92672">/</span>len(dataloader_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># print epoch # and training loss</span>
+</span></span><span style="display:flex;"><span>    tqdm<span style="color:#f92672">.</span>write(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Epoch </span><span style="color:#e6db74">{</span>epoch<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    tqdm<span style="color:#f92672">.</span>write(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Training loss: </span><span style="color:#e6db74">{</span>loss_train_avg<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># compute the validation loss &amp; accuracy of the epoch</span>
+</span></span><span style="display:flex;"><span>    val_loss, predictions, true_vals <span style="color:#f92672">=</span> evaluate(dataloader_val)
+</span></span><span style="display:flex;"><span>    val_f1 <span style="color:#f92672">=</span> f1_score_func(predictions, true_vals)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># print validation loss &amp; accuracy</span>
+</span></span><span style="display:flex;"><span>    tqdm<span style="color:#f92672">.</span>write(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Validation loss: </span><span style="color:#e6db74">{</span>val_loss<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    tqdm<span style="color:#f92672">.</span>write(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;F1 Score (Weighted): </span><span style="color:#e6db74">{</span>val_f1<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p><strong>Epoch 1</strong></p>
+<p>Training loss: 0.5482631898960384</p>
+<p>Validation loss: 0.5348240941578235</p>
+<p>F1 Score (Weighted): 0.8805902422136439</p>
+<hr>
+<p><strong>Epoch 2</strong></p>
+<p>Training loss: 0.3173633142948431</p>
+<p>Validation loss: 0.5934633307977647</p>
+<p>F1 Score (Weighted): 0.885306253267006</p>
+<hr>
+<p><strong>Epoch 3</strong></p>
+<p>Training loss: 0.16964389977592292</p>
+<p>Validation loss: 0.69995356636486</p>
+<p>F1 Score (Weighted): 0.8886812897554138</p>
+<hr>
+<p><strong>Epoch 4</strong></p>
+<p>Training loss: 0.09559309570186539</p>
+<p>Validation loss: 0.7222233983969576</p>
+<p>F1 Score (Weighted): 0.8836152107516756</p>
+<h2 id="validation-on-test-data">Validation on Test Data</h2>
+<p>Before validating on our unlabeled test data, we need to import the best model weights. We will use the model weights from epoch 3 since it achieved the best F1 score.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Load in the model weights</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>load_state_dict(torch<span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#39;finetuned_BERT_epoch_4.model&#39;</span>,
+</span></span><span style="display:flex;"><span>                                  map_location<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#39;cuda&#39;</span>)))
+</span></span></code></pre></div><p>Next, we can use the saved model to get the predictions on the test set.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># evaluate saved model on testing dataset</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>eval()
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> batch <span style="color:#f92672">in</span> dataloader_test:
+</span></span><span style="display:flex;"><span>    batch <span style="color:#f92672">=</span> tuple(b<span style="color:#f92672">.</span>to(device) <span style="color:#66d9ef">for</span> b <span style="color:#f92672">in</span> batch)
+</span></span><span style="display:flex;"><span>    inputs <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;input_ids&#39;</span>:      batch[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#39;attention_mask&#39;</span>: batch[<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> model(<span style="color:#f92672">**</span>inputs)
+</span></span><span style="display:flex;"><span>    logits <span style="color:#f92672">=</span> outputs[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    logits <span style="color:#f92672">=</span> logits<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>    predictions<span style="color:#f92672">.</span>append(logits)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># convert probabilities to class labels and flatten the list</span>
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>flatten()
+</span></span></code></pre></div><p>Finally, we can create a submission file with the predictions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># append label predictions to test dataframe</span>
+</span></span><span style="display:flex;"><span>df_test[<span style="color:#e6db74">&#39;pred&#39;</span>] <span style="color:#f92672">=</span> predictions
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># convert label predictions to original labeled columns</span>
+</span></span><span style="display:flex;"><span>df_test <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>get_dummies(df_test, columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;pred&#39;</span>])
+</span></span><span style="display:flex;"><span>df_test<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;postId&#39;</span>, <span style="color:#e6db74">&#39;message&#39;</span>, <span style="color:#e6db74">&#39;Appreciation_pred&#39;</span>, <span style="color:#e6db74">&#39;Complaint_pred&#39;</span>, <span style="color:#e6db74">&#39;Feedback_pred&#39;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">del</span> df_test[<span style="color:#e6db74">&#39;message&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># save predictions to csv file</span>
+</span></span><span style="display:flex;"><span>df_test<span style="color:#f92672">.</span>to_csv(<span style="color:#e6db74">&#39;submission.csv&#39;</span>, index<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>Without any hyperparameter tuning, we were able to achieve an F1 score of 0.88 on the test set. This is a great result considering that we only used 10% of the training data. We can further improve the model by using more training data and tuning the hyperparameters. We can also try other models such as XLNet and RoBERTa.</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h">Next Project</span>
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://gbarland.github.io/projects/catsvsdogs/">
+                  <span class="button__text">Cats vs. Dogs Image Classifier</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+
+    
+      
+        
+
+      
+    
+
+    </div>
+
+    
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user"> </div>
+    
+  </div>
+</footer>
+
+<script src="https://gbarland.github.io/assets/main.js"></script>
+<script src="https://gbarland.github.io/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

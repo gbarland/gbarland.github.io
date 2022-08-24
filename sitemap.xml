@@ -3,12 +3,15 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://gbarland.github.io/</loc>
-    <lastmod>2022-05-10T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://gbarland.github.io/projects/catsvsdogs/</loc>
-    <lastmod>2022-05-10T00:00:00+00:00</lastmod>
+    <loc>https://gbarland.github.io/projects/bertclassifier/</loc>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://gbarland.github.io/projects/</loc>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://gbarland.github.io/projects/catsvsdogs/</loc>
     <lastmod>2022-05-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://gbarland.github.io/projects/awsfraudproject/</loc>
